@@ -13,20 +13,16 @@ export default function CreatePage() {
     setOptions((ops) => ops.map((o, idx) => (idx === i ? v : o)));
 
   const addOption = () => setOptions((ops) => [...ops, '']);
+  const removeOption = (i: number) => setOptions((ops) => ops.filter((_, idx) => idx !== i));
 
-  const removeOption = (i: number) =>
-    setOptions((ops) => ops.filter((_, idx) => idx !== i));
-
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // Build a safe payload: trim, drop empties
+  const submit = async () => {
+    // Build a safe payload: trim + remove empties
     const payload = {
       question: question.trim(),
-      options: options.map((o) => o.trim()).filter(Boolean), // array of strings only
+      options: options.map((o) => o.trim()).filter(Boolean),
     };
 
-    // Light client-side guard (server also validates)
+    // Lightweight client checks (server also validates)
     if (payload.question.length < 5 || payload.question.length > 140) {
       alert('Question must be 5–140 characters.');
       return;
@@ -47,12 +43,8 @@ export default function CreatePage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-
       const data = await res.json();
-
       if (!res.ok) throw new Error(data?.error || 'Failed to create poll');
-
-      // Go to the poll page
       router.push(`/p/${data.id}`);
     } catch (err: any) {
       alert(err?.message || 'Something went wrong creating the poll.');
@@ -66,8 +58,8 @@ export default function CreatePage() {
       <h1 className="text-3xl font-bold mb-2">FlashPoll</h1>
       <p className="text-gray-500 mb-6">Create a poll, share the link, get instant votes.</p>
 
-      {/* noValidate disables Safari’s built-in pattern/required popups */}
-      <form onSubmit={submit} noValidate className="space-y-4">
+      {/* No <form> tag — prevents Safari native validation popups */}
+      <div className="space-y-4">
         {/* Question */}
         <div>
           <label className="block text-sm font-medium mb-1">Question</label>
@@ -78,6 +70,8 @@ export default function CreatePage() {
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
             maxLength={140}
+            autoComplete="off"
+            inputMode="text"
           />
           <div className="text-xs text-gray-400 mt-1">{question.length}/140</div>
         </div>
@@ -94,6 +88,8 @@ export default function CreatePage() {
                 value={opt}
                 onChange={(e) => updateOption(i, e.target.value)}
                 maxLength={60}
+                autoComplete="off"
+                inputMode="text"
               />
               {options.length > 2 && (
                 <button
@@ -108,24 +104,21 @@ export default function CreatePage() {
             </div>
           ))}
           {canAdd && (
-            <button
-              type="button"
-              onClick={addOption}
-              className="text-sm underline"
-            >
+            <button type="button" onClick={addOption} className="text-sm underline">
               + Add option (max 6)
             </button>
           )}
         </div>
 
         <button
-          type="submit"
+          type="button"
+          onClick={submit}
           disabled={loading}
           className="w-full rounded bg-black text-white py-3 font-medium disabled:opacity-50"
         >
           {loading ? 'Creating…' : 'Create & Get Link'}
         </button>
-      </form>
+      </div>
     </main>
   );
 }
