@@ -48,7 +48,7 @@ export default function CreatePage() {
         <div>
           <label className="block text-sm font-medium mb-1">Question</label>
           <input
-            className="w-full rounded border px-3 py-2"
+            className="w-full rounded border px-3 py-2 text-black"
             placeholder="What should we order for lunch?"
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
@@ -65,7 +65,7 @@ export default function CreatePage() {
           {options.map((opt, i) => (
             <div key={i} className="flex gap-2">
               <input
-                className="flex-1 rounded border px-3 py-2"
+                className="flex-1 rounded border px-3 py-2 text-black"
                 placeholder={`Option ${i + 1}`}
                 value={opt}
                 onChange={(e) => updateOption(i, e.target.value)}
