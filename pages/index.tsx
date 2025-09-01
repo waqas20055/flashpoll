@@ -70,8 +70,8 @@ export default function CreatePage() {
                 value={opt}
                 onChange={(e) => updateOption(i, e.target.value)}
                 maxLength={60}
-                required
               />
+              
               {options.length > 2 && (
                 <button
                   type="button"
