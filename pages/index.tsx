@@ -20,7 +20,7 @@ export default function CreatePage() {
     try {
       const payload = {
         question: question.trim(),
-        options: options.map(o => o.trim()).filter(Boolean) // array of strings only
+        options: options.map(o => o.trim()).filter(Boolean), // only non-empty strings
       };
       const res = await fetch('/api/polls', {
         method: 'POST',
@@ -71,7 +71,7 @@ export default function CreatePage() {
                 onChange={(e) => updateOption(i, e.target.value)}
                 maxLength={60}
               />
-              
+
               {options.length > 2 && (
                 <button
                   type="button"
