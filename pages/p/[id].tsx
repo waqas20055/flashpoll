@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 type PollData = {
   id: string;
@@ -127,9 +128,9 @@ export default function PollPage() {
   >
     Copy link
   </button>
-  <a href="/" className="flex-1 text-center rounded bg-black text-white py-2">
+  <Link href="/" className="flex-1 text-center rounded bg-black text-white py-2">
     Make your own
-  </a>
+  </Link>
 </div>
     </main>
   );
