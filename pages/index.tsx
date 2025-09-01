@@ -20,7 +20,7 @@ export default function CreatePage() {
     try {
       const payload = {
         question: question.trim(),
-        options: options.map(o => o.trim()).filter(Boolean), // only non-empty strings
+        options: options.map(o => o.trim()).filter(Boolean), 
       };
       const res = await fetch('/api/polls', {
         method: 'POST',
