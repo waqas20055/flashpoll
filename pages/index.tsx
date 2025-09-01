@@ -19,8 +19,8 @@ export default function CreatePage() {
     setLoading(true);
     try {
       const payload = {
-        question,
-        options: options.map((o) => o.trim()).filter(Boolean),
+        question: question.trim(),
+        options: options.map(o => o.trim()).filter(Boolean) // array of strings only
       };
       const res = await fetch('/api/polls', {
         method: 'POST',

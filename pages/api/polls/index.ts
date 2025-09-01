@@ -13,16 +13,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(400).json({ error: 'Provide 2–6 options.' });
       }
 
-      const clean = options
+   const clean = Array.isArray(options)
+    ? options
         .map((o: unknown) => (typeof o === 'string' ? o.trim() : ''))
         .filter((o: string) => o.length > 0 && o.length <= 60);
+    : [];
 
-      if (clean.length < 2) {
-        return res.status(400).json({ error: 'Options must be non-empty (max 60 chars).' });
-      }
+    if (clean.length < 2) {
+       return res.status(400).json({ error: 'Provide at least 2 valid options (max 60 chars).' });
+     }
 
       const poll = await prisma.poll.create({
-        data: { question: question.trim(), options: { create: clean.map((text: string) => ({ text })) } },
+        data: {
+          question: question.trim(), 
+          options: { 
+            create: clean.map((text: string) => ({ text })),
+           }, 
+        },
       });
 
       return res.status(200).json({ id: poll.id });
